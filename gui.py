@@ -10,7 +10,6 @@ import Sports
 
 pygame.init()
 pygame.mixer.init()
-#as;ldjf
 s = UDPserver.server()
 s.daemon = True
 s.start()
