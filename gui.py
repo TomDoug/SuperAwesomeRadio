@@ -7,10 +7,9 @@ import id3reader #accesses mp3 metadata
 import UDPserver #allows android remote to work
 import songClass
 import Sports
-
+#as;dlkjf
 pygame.init()
 pygame.mixer.init()
-
 s = UDPserver.server()
 s.daemon = True
 s.start()
