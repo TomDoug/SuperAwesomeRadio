@@ -3,7 +3,7 @@ from threading import Thread
 
 class server(Thread):
 	def run(self):
-		self.host = '127.0.0.1'
+		self.host = ''
 		self.port = 8888
 
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

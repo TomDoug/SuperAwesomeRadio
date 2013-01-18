@@ -22,6 +22,7 @@ class server(Thread):
 		self.running = True
 		while self.running:
 			d = ''
+			string = ""
 			d = clsock.recv(1024)
 			while 1:
 			
