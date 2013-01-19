@@ -1,40 +1,70 @@
-import socket, sys
+import socket, sys, pickle
 from threading import Thread
+import os, songClass
 
 class server(Thread):
 	def run(self):
-		self.host = '127.0.0.1'
+		self.running = True
+		self.host = ''
 		self.port = 8888
 
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.songs = []
+		for (dirpath, dirname, filenames) in os.walk('C:\\Users\\TomDoug\\Music'): 
+		
+			for i in filenames:
+		
+				if i.find('.mp3') != -1:
+					path = dirpath + "\\" + i
+					#makes a new instance of the song class for each song
+					self.songs.append(songClass.song(path))	
+		
+
+		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		print 'socket created'
 		
-		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-		s.bind((self.host, self.port))
+		self.s.bind((self.host, self.port))
 
 		print "Socket binded"
 
-		s.listen(5)
+		self.s.listen(5)
 
-		clsock, addr = s.accept()
-		string = ""
-		self.running = True
-		while self.running:
-			d = ''
-			string = ""
-			d = clsock.recv(1024)
-			while 1:
+		self.clsock, addr = self.s.accept()
+		self.inputLoop()
 			
-				string = string + d
-				if len(d) < 1000:break
-				d = clsock.recv(1024)
-				print d
-			if string == '':continue
-			print string
-			if string == 'stop':
+		
+	def inputLoop(self):
+		while self.running:
+			inMess = self.getMessage()
+			print inMess
+			if inMess == "getSongs":
+				self.getSongs()
+			if inMess == 'stop':
 				self.running = False
-		clsock.close()
-		s.close()
+				break
+			if inMess == 'play':
+				print "playing"
+			if inMess == '1':
+				print "Stopping Song"
+		
+		self.clsock.close()
+		self.s.close()
+
+	def sendMessage(self, message):
+		self.clsock.send(message)
+	def getSongs(self):
+		pick = pickle.dumps(self.songs)
+		self.sendMessage(pick)
+	def getMessage(self):
+		d = ''
+		string = ""
+				
+		string = self.clsock.recv(1024)
+		if string == 'stop':
+			self.running = False
+			print "stopp"
+		return string
+
 t = server()
 t.start()
