@@ -243,6 +243,14 @@ class Mainmenu():
 
 		while True:
 			for event in pygame.event.get():
+				if event.type == pygame.KEYDOWN and event.key == K_SPACE:
+					busy = pygame.mixer.music.get_busy()
+					if busy == False:
+						pygame.mixer.music.play()
+
+					if busy == True:
+						pygame.mixer.music.stop()
+
 
 				if event.type == pygame.QUIT:
 					sys.exit()
