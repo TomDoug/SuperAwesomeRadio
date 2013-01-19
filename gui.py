@@ -7,7 +7,7 @@ import id3reader #accesses mp3 metadata
 import UDPserver #allows android remote to work
 import songClass
 import Sports
-#as;dlkjf
+
 pygame.init()
 pygame.mixer.init()
 s = UDPserver.server()
@@ -220,8 +220,11 @@ class Mainmenu():
 					sys.exit()
 
 				elif event.type == KEYDOWN and event.key == K_BACKSPACE:
-					pygame.mixer.music.stop()
-					self.mainMenu()
+					if self.currentlist == "Artists":
+						self.mainMenu()
+
+					elif self.currentlist == "tunes":
+						self.MusicArtist()
 
 
 
@@ -240,6 +243,14 @@ class Mainmenu():
 
 		while True:
 			for event in pygame.event.get():
+				if event.type == pygame.KEYDOWN and event.key == K_SPACE:
+					busy = pygame.mixer.music.get_busy()
+					if busy == False:
+						pygame.mixer.music.play()
+
+					if busy == True:
+						pygame.mixer.music.stop()
+
 
 				if event.type == pygame.QUIT:
 					sys.exit()
@@ -248,7 +259,7 @@ class Mainmenu():
 					sys.exit()
 
 				elif event.type == KEYDOWN and event.key == K_BACKSPACE:
-					return self.MusicSongs()
+					return self.MusicSongs(currentsong.artist)
 	
 	def updateSports(self):
 		NHL = pygame.image.load(os.path.join('imgs','NHL.jpg'))
