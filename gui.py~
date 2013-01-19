@@ -223,7 +223,7 @@ class Mainmenu():
 					if self.currentlist == "Artists":
 						self.mainMenu()
 
-					elif self.currentlist -- "tunes":
+					elif self.currentlist == "tunes":
 						self.MusicArtist()
 
 
@@ -243,6 +243,14 @@ class Mainmenu():
 
 		while True:
 			for event in pygame.event.get():
+				if event.type == pygame.KEYDOWN and event.key == K_SPACE:
+					busy = pygame.mixer.music.get_busy()
+					if busy == False:
+						pygame.mixer.music.unpause()
+
+					if busy == True:
+						pygame.mixer.music.pause()
+
 
 				if event.type == pygame.QUIT:
 					sys.exit()
